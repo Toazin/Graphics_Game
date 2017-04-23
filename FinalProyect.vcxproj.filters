@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\bitmap">
+      <UniqueIdentifier>{a6e73dc7-dac0-4d07-9ded-f5fae69e43fd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="object_gl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="workspace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Planet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="image_loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="object_gl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="workspace.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Planet.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="image_loader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="earth.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="mars.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="jupiter.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="mercury.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="neptune.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="pluto.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="sun.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="uranus.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="venus.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+    <Image Include="saturn.bmp">
+      <Filter>Source Files\bitmap</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
