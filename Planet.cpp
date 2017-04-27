@@ -6,6 +6,8 @@ PlanetGL::PlanetGL(int p) : ObjectGL() {
 	this->slices = 30.f;
 	this->stacks = 30.f;
 	this->type = p;
+	this->rot = 0.0;
+	this->deltaRot = 0.4;
 	init(p);
 
 }
@@ -18,24 +20,39 @@ void PlanetGL::render() {
 	GLfloat *ptrM = glm::value_ptr(this->m);
 
 	glMultMatrixf(ptrM);
+	this->rot = this->rot + deltaRot;
+
 
 	if (!this->closed) {
 		renderbmp();
+		glRotatef(-this->rot, 0, 1., 0);
+		glRotatef(-90, 1., 0, 0);
 		gluSphere(this->quad, this->radius, this->slices, this->stacks);
 	}
 	else
 	{
 		this->box->setColor(this->color[0], this->color[1], this->color[2]);
-		this->box->render();
+		if (this->timer >= this->limit)
+		{
+			this->box->render();
+		}
+		else {
+			renderbmp();
+			glRotatef(-this->rot, 0, 1., 0);
+			glRotatef(-90, 1., 0, 0);
+			gluSphere(this->quad, this->radius, this->slices, this->stacks);
+		}
 	}
 	
-
+	if (this->timer < this->limit) {
+		this->timer++;
+	}
 	glPopMatrix();
 }
 
 void PlanetGL::renderbmp() {
 	glClearColor(0.f, 0.f, 0.f, 0.f);
-	glColor3f(this->color[0], this->color[1], this->color[2]);
+	//glColor3f(this->color[0], this->color[1], this->color[2]);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 	glTexImage2D(GL_TEXTURE_2D,
@@ -79,30 +96,43 @@ void PlanetGL::getType(int p)
 		break;
 	case PlanetGL::MERCURY:
 		this->bmpName = "mercury.bmp";
+		//this->radius = 0.068250993f;
 		break;
 	case PlanetGL::MARS:
 		this->bmpName = "mars.bmp";
+		//this->radius = 0.095037207f;
 		break;
 	case PlanetGL::EARTH:
 		this->bmpName = "earth.bmp";
+		//this->radius = 0.178425558f;
 		break;
 	case PlanetGL::VENUS:
 		this->bmpName = "venus.bmp";
+		//this->radius = 0.169300062f;
 		break;
 	case PlanetGL::JUPITER:
 		this->bmpName = "jupiter.bmp";
+		//this->radius = 2.f;
 		break;
 	case PlanetGL::SATURN:
-		this->bmpName = "saturn.bmp";
+		this->bmpName = "saturnring.bmp";
+		//this->radius = 1.686006826f;
 		break;
 	case PlanetGL::URANUS:
 		this->bmpName = "uranus.bmp";
+		//this->radius = 0.715017065f;
 		break;
 	case PlanetGL::NEPTUNE:
 		this->bmpName = "neptune.bmp";
+		//this->radius = 0.693392268f;
 		break;
 	case PlanetGL::PLUTON:
-		this->bmpName = "pluto.bmp";
+		this->bmpName = "pluto5.bmp";
+		//this->radius = 0.033150562f;
+		break;
+	case PlanetGL::MOON:
+		this->bmpName = "moon.bmp";
+		//this->radius = 0.04859285f;
 		break;
 	}
 }

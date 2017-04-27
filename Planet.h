@@ -16,11 +16,13 @@ public:
 					SATURN = 6, 
 					URANUS = 7, 
 					NEPTUNE = 8, 
-					PLUTON = 9};
+					PLUTON = 9,
+					MOON = 10};
 	PlanetGL(int p);
 	~PlanetGL();
 	void setQuad(GLUquadric *quad);
 	void render();
+
 private:
 	ObjectGL * box;
 	GLfloat radius, slices, stacks;
@@ -31,6 +33,8 @@ private:
 	const char* bmpName;
 	void getType(int p);
 	void init(int p);
+	GLfloat rot;
+	GLfloat deltaRot;
 };
 
 #endif 

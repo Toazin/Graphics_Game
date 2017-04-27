@@ -8,6 +8,10 @@ ObjectGL::ObjectGL()
 	this->color[3] = 1.f;
 	this->style = GL_LINE;
 	this->closed = 1;
+	this->matched = 0;
+	this->limit = 20;
+	this->timer = this->limit + 1;
+
 }
 
 void ObjectGL::setColor(GLfloat r, GLfloat g, GLfloat b) {
@@ -43,6 +47,7 @@ void ObjectGL::setType(int type) {
 
 void ObjectGL::flip()
 {
+	if (this->matched == 1) return;
 	if (this->closed == 1)
 	{
 		this->closed = 0;
@@ -56,4 +61,19 @@ void ObjectGL::flip()
 int ObjectGL::getClosed()
 {
 	return this->closed;
+}
+
+void ObjectGL::setMatched(int match)
+{
+	this->matched = match;
+}
+
+int ObjectGL::getMatched()
+{
+	return this->matched;
+}
+
+void ObjectGL::initTimmer()
+{
+	this->timer = 0;
 }

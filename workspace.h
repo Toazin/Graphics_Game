@@ -32,6 +32,19 @@ public:
 	void generatePlanets(int n, int m);
 	void flip();
 	int getClosed();
+	bool isMatch();
+	bool inPair(ObjectGL * item);
+	bool isFull();
+	void resetSelection();
+	void setMatch();
+	void manageSelection();
+	void fix();
+	void addToList(ObjectGL * obj);
+	int getPair(int i);
+	int getPairType(int i);
+	void restart();
+	int getIntentos();
+	int getScore();
 };
 
 #endif

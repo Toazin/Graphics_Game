@@ -38,11 +38,21 @@ GLint yClick = 0;
 GLint xAux = 0;
 GLint yAux = 0;
 GLfloat rotX = 0.f;
-GLfloat rotY = 0.f;
+GLfloat rotY = 312;
 GLfloat panX = 0.f;
 GLfloat panY = 0.f;
-GLfloat zoomZ = -11.f;
+GLfloat zoomZ = -40.f;
 
+//Camera
+float eyeX = 0;
+float eyeY = 50;//-50
+float eyeZ = -20;
+float centerX = 0;
+float centerY = 0;
+float centerZ = 0;
+float upX = 0;
+float upY = -10;
+float upZ = 0;
 
 //Workspace
 WorkSpace *myWork;
@@ -53,12 +63,16 @@ list<ObjectGL *> objectList;
 //List Management
 int index = 0;
 ObjectGL * selectedItem;
-int origin = 0;
 
-//Displayed text
-int typeFigure = 0;
+
+//Displayed text----
+int leftSelectType = 0;
+int rightSelectType = 0;
+int middleSelectType = 0;
+int win = 0;
+
 int positionFigure = 0;
-string originText = "Coordinate";
+
 //Actual Text Description
 string esText = "";
 string euText = "";
@@ -76,6 +90,7 @@ void init()
 {
 	glClearColor(0.f, 0.f, 0.f, 0.f);
 	glColor3f(1.f, 1.f, 1.f);
+	myWork->restart();
 }
 
 // Función que se invoca cada vez que se redimensiona la ventana
@@ -168,34 +183,16 @@ void getTypeDescription(int type)
 		esText = "Pluton";
 		euText = "Pluto";
 		break;
+	case 10:
+		esText = "Luna";
+		euText = "Moon";
+		break;
 	}
 }
 
-void displayText3()
+void displayText(string s, GLdouble x, GLdouble y, void * font)
 {
-	positionFigure = myWork->getIndex();
-	typeFigure = myWork->getType();
-	getTypeDescription(typeFigure);
-	//cout << "Index: " << index << endl;
-	string tmp = " adsad " + originText + " - Object Types:" + euText + "(" + to_string(typeFigure) + ") - " + to_string(positionFigure);
-	glColor3ub(0, 255, 0);
-	glRasterPos2i(((width / 2) / 100) - .5, ((height / 2) / 100) - .5);
-	for (size_t i = 0; i < tmp.size(); ++i)
-	{
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tmp[i]);
-	}
-	glutPostRedisplay();
-}
-
-void displayText1()
-{
-	positionFigure = myWork->getIndex();
-	typeFigure = myWork->getType();
-	getTypeDescription(typeFigure);
-	//cout << "Index: " << index << endl;
-	string s = originText + " - Planeta Encontrado:" + esText + "(" + to_string(typeFigure) + ") - " + to_string(positionFigure);
-
-	glDisable(GL_TEXTURE_2D); //added this
+	glDisable(GL_TEXTURE_2D); 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -203,58 +200,62 @@ void displayText1()
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	glRasterPos2i(10, 10);
-	void * font = GLUT_BITMAP_HELVETICA_18;
+	glRasterPos2i(x, y);//GLUT_BITMAP_TIMES_ROMAN_24
+	//void * font = GLUT_BITMAP_HELVETICA_18;
 	for (string::iterator i = s.begin(); i != s.end(); ++i)
 	{
 		char c = *i;
 		glColor3d(1.0, 0.0, 0.0);
 		glutBitmapCharacter(font, c);
 	}
-	glMatrixMode(GL_MODELVIEW); //swapped this with...
+	glMatrixMode(GL_MODELVIEW); 
 	glPopMatrix();
-	glMatrixMode(GL_PROJECTION); //...this
+	glMatrixMode(GL_PROJECTION); 
 	glPopMatrix();
-	//added this
-	glEnable(GL_TEXTURE_2D);
 
+	glEnable(GL_TEXTURE_2D);
 	glutPostRedisplay();
 }
 
-void displayText2()
+void obtainTexts()
 {
-	positionFigure = myWork->getIndex();
-	typeFigure = myWork->getType();
-	getTypeDescription(typeFigure);
-	//cout << "Index: " << index << endl;
-	string s = originText + " - Planet found:" + euText + "(" + to_string(typeFigure) + ") - " + to_string(positionFigure);
-
-	glDisable(GL_TEXTURE_2D); //added this
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	gluOrtho2D(50, 0.0, 0.0, height);
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	glRasterPos2i(10, 10);
-	void * font = GLUT_BITMAP_HELVETICA_18;
-	for (string::iterator i = s.begin(); i != s.end(); ++i)
+	int left = myWork->getPair(0);
+	int right = myWork->getPair(1);
+	//First Selection
+	if (left == 1)
 	{
-		char c = *i;
-		glColor3d(1.0, 0.0, 0.0);
-		glutBitmapCharacter(font, c);
+		leftSelectType = myWork->getPairType(0);
+		getTypeDescription(leftSelectType);
+		string s = "Este Planeta es: " + esText;
+		displayText(s, width*.1, height*.1, GLUT_BITMAP_HELVETICA_18);
 	}
-	glMatrixMode(GL_MODELVIEW); //swapped this with...
-	glPopMatrix();
-	glMatrixMode(GL_PROJECTION); //...this
-	glPopMatrix();
-	//added this
-	glEnable(GL_TEXTURE_2D);
+	//Second Selection
+	if (right == 1)
+	{
+		rightSelectType = myWork->getPairType(1);
+		getTypeDescription(rightSelectType);
+		string s = "This Planet is: " + euText;
+		displayText(s, width*.8, height*.1, GLUT_BITMAP_HELVETICA_18);
+	}
+	//Actual selection
+	if(selectedItem != NULL && selectedItem->ObjectGL::getClosed() == 0)
+	{
+		middleSelectType = myWork->getType();
+		getTypeDescription(middleSelectType);
+		string s = "Encontraste a : " + esText; 
+		displayText(s, (width / 2) - (width * .05), height*.1, GLUT_BITMAP_HELVETICA_18);
+	}
 
+	//Score
+	if (win == 1)
+	{
+		int cant = myWork->getIntentos();
+		string sCant = to_string(cant);
+		string s = "Has ganado en " + sCant + " intentos, da click derecho para reiniciar";
+		displayText(s, (width / 2) - (width * .15), height / 2, GLUT_BITMAP_TIMES_ROMAN_24);
+	}
 	glutPostRedisplay();
 }
-
 
 void colorSelectedItem()
 {
@@ -270,8 +271,9 @@ void render()
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, -1, upZ);
 	// Transformación de vista
-	glTranslatef(panX, panY, zoomZ);
+	//glTranslatef(panX, panY, zoomZ);
 	glRotatef(rotY, 1.0, 0.0, 0.0);
 	glRotatef(rotX, 0.0, 1.0, 0.0);
 
@@ -282,14 +284,13 @@ void render()
 
 	for (list<ObjectGL *>::iterator it = objectList.begin(); it != objectList.end(); it++)
 	{
+		//cout << "Render de: " << (*it) << endl;
 		(*it)->render();
 	}
 
-	displayText1();
-	displayText2();
-	
-	
+	obtainTexts();
 	selectedItem = myWork->getSelected();
+
 	colorSelectedItem();
 	glPopMatrix();
 
@@ -300,9 +301,14 @@ void keyboardFunction(unsigned char key, int x, int y)
 {
 	if (key == 32) { //Barra Espaciadora
 		cout << "Espacio perras" << endl;
-		selectedItem->flip();
+		myWork->manageSelection();
+		if (myWork->getScore() == 10) {
+			win = 1;
+		}
+		//myWork->flip();
 	}
 	cout << key << " key press " << "x = " << x << " y = " << y << endl;
+	
 	if (selectedItem != NULL) {
 		if (key == 'w') {
 			selectedItem->traslate(0.f, .2f, 0.f);
@@ -406,6 +412,7 @@ void specialKeyboard(int key, int x, int y) {
 		cout << "index: " << index << endl;
 		if (objectList.size() > 0) {
 			index = index + 1;
+			myWork->fix();
 			myWork->setSelected(index);
 		}
 		return;
@@ -414,21 +421,10 @@ void specialKeyboard(int key, int x, int y) {
 		cout << "index: " << index << endl;
 		if (objectList.size() > 0) {
 			index = index - 1;
+			//myWork->manageClose();
+			myWork->fix();
 			myWork->setSelected(index);
 		}
-		return;
-	}
-	if (key == 112) {
-		cout << "SHIFT: " <<  origin << endl;
-		if (origin != 1) {
-			originText = "Origin";
-			origin = 1;
-		}
-		else {
-			originText = "Coordinate";
-			origin = 0;
-		}
-		glutPostRedisplay();
 		return;
 	}
 }
@@ -458,7 +454,7 @@ void mouse(int button, int state, int x, int y)
 		xAux = panX;
 		yAux = panY;
 	}
-	
+	//cout << "x: " << x << " y: " << y << endl;
 }
 
 void mouseMotion(int x, int y)
@@ -537,36 +533,19 @@ void menu(int num) {
 	case 1:
 		//Restart
 		cout << "Restart Press..." << endl;
+		myWork->restart();
+		win = 0;
 		//myWork->deleteItem();
-		break;
-	case 2:
-		cout << "TEST 1" << endl;
-		myWork->addFigure(3, mouseX, mouseY);
-		break;
-	case 3:
-		cout << "TEST 2" << endl;
-		myWork->addFigure(2, 0, 0);
-		break;
-	case 4:
-		cout << "TEST 2" << endl;
-		myWork->addFigure(4, mouseX, mouseY);
 		break;
 	default:
 		cout << "Coordx: " << rightX << "Coordy: " << rightY << endl;
 		cout << "Width: " << width << "Height: " << height << endl;
-		//float mouseX = (-(rightX - (width / 2)) / (1350 / zoomZ));
-		//float mouseY = ((rightY - (height / 2)) / (1350 / zoomZ));
-
 		float xa = (-(rightX - (width / 2)) / (1350 / zoomZ));
 		float ya = ((rightY - (height / 2)) / (1350 / zoomZ));
 
 		cout << "Posx: " << mouseX << "Posy: " << mouseY << endl;
-		if (origin == 1) {
-			myWork->addFigure(num, 0, 0);
-		}
-		else {
-			myWork->addFigure(num, mouseX, mouseY);
-		}
+		//	myWork->addFigure(num, 0, 0);
+		myWork->addFigure(num, mouseX, mouseY);
 		
 		break;
 	}
@@ -585,10 +564,6 @@ void status(int status, int x, int y) {
 void createMenu(void) {
 	menu_id = glutCreateMenu(menu);
 	glutAddMenuEntry("Restart", 1);
-	glutAddMenuEntry("TEST 1", 2);
-	glutAddMenuEntry("TEST 2", 3);
-	glutAddMenuEntry("TEST 3", 4);
-	//glutAddSubMenu("Dibujar figura", submenu_id);
 	glutAddMenuEntry("Salir", 0);     
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	glutMenuStatusFunc(status);
@@ -605,8 +580,8 @@ int main(GLint argc, GLchar **argv)
 	// 1.2 Se definen las funciones callback para el manejo de eventos
 	glutReshapeFunc(resize);
 	glutDisplayFunc(render);
-	glutMouseFunc(mouse);
-	glutMotionFunc(mouseMotion);
+	//glutMouseFunc(mouse);
+	//glutMotionFunc(mouseMotion);
 	glutKeyboardFunc(keyboardFunction);
 	glutSpecialFunc(specialKeyboard);
 	glutMouseWheelFunc(mouseWheel);
@@ -626,5 +601,6 @@ int main(GLint argc, GLchar **argv)
 
 	// 4. Se inicia el ciclo de escucha de eventos
 	glutMainLoop();
+	
 	return 0;
 }

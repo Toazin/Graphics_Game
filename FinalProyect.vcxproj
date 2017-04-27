@@ -167,9 +167,15 @@
     <Image Include="jupiter.bmp" />
     <Image Include="mars.bmp" />
     <Image Include="mercury.bmp" />
+    <Image Include="moon.bmp" />
     <Image Include="neptune.bmp" />
     <Image Include="pluto.bmp" />
+    <Image Include="pluto2.bmp" />
+    <Image Include="pluto3.bmp" />
+    <Image Include="pluto4.bmp" />
+    <Image Include="pluto5.bmp" />
     <Image Include="saturn.bmp" />
+    <Image Include="saturns-rings.bmp" />
     <Image Include="sun.bmp" />
     <Image Include="uranus.bmp" />
     <Image Include="venus.bmp" />
